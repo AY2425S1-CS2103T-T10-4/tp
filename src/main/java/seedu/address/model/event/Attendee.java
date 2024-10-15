@@ -56,4 +56,10 @@ public class Attendee extends Person {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Name: %s; Phone: %s; Email: %s; Relationship: %s; Status: %s",
+                getName(), getPhone(), getEmail(), getRelationship(), status);
+    }
+
 }
