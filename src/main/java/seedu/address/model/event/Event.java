@@ -6,8 +6,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import seedu.address.model.person.Person;
+import seedu.address.model.person.Address;
 
 
 /**
@@ -17,7 +18,8 @@ import seedu.address.model.person.Person;
 public class Event {
     private final String eventName;
     private final LocalDate date;
-    private final Set<Person> attendees = new HashSet<>();
+    private final Set<Attendee> attendees = new HashSet<>();
+    private Address location;
 
     /**
      * Constructs an {@code Event}.
@@ -26,11 +28,12 @@ public class Event {
      * @param date A valid date.
      * @param attendees A set of {@code Person} attending the event.
      */
-    public Event(String eventName, LocalDate date, Set<Person> attendees) {
-        requireAllNonNull(eventName, date, attendees);
+    public Event(String eventName, LocalDate date, Set<Attendee> attendees, Address location) {
+        requireAllNonNull(eventName, date, attendees, location);
         this.eventName = eventName;
         this.date = date;
         this.attendees.addAll(attendees);
+        this.location = location;
     }
 
     public String getEventName() {
@@ -41,8 +44,12 @@ public class Event {
         return date;
     }
 
-    public Set<Person> getAttendees() {
+    public Set<Attendee> getAttendees() {
         return Collections.unmodifiableSet(attendees);
+    }
+
+    public Address getLocation() {
+        return location;
     }
 
     /**
@@ -71,7 +78,8 @@ public class Event {
         Event otherEvent = (Event) other;
         return eventName.equals(otherEvent.eventName)
                 && date.equals(otherEvent.date)
-                && attendees.equals(otherEvent.attendees);
+                && attendees.equals(otherEvent.attendees)
+                && location.equals(otherEvent.location);
     }
 
     @Override
@@ -81,10 +89,10 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{"
-                + "name='" + eventName + '\''
-                + ", date=" + date
-                + ", attendees=" + attendees
-                + '}';
+        String attendeesString = attendees.stream()
+                .map(Attendee::toString)
+                .collect(Collectors.joining(", "));
+        return String.format("Event: %s; Date: %s; Location: %s; Attendees: [%s]",
+                eventName, date, location, attendeesString);
     }
 }
