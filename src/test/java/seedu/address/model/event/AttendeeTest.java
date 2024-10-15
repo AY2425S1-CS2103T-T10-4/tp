@@ -34,7 +34,7 @@ public class AttendeeTest {
         Attendee attendee = new Attendee(new Name("John Doe"), new Phone("12345678"), new Email("john@example.com"),
                 new Relationship("friend"), Attendee.Status.ATTENDING);
         String expectedString = "Name: John Doe; Phone: 12345678; Email: john@example.com;"
-                + "Relationship: friend; Status: ATTENDING";
+                + " Relationship: friend; Status: ATTENDING";
         assertEquals(expectedString, attendee.toString());
     }
 }
