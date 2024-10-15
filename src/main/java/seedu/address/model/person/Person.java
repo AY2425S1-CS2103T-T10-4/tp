@@ -2,9 +2,12 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.event.Attendance;
 
 /**
  * Represents a Person in the address book.
@@ -20,6 +23,7 @@ public class Person {
     // Data fields
     private final Relationship relationship;
 
+    private final Set<Attendance> attendances = new HashSet<>();
 
     /**
      * Every field must be present and not null.
@@ -47,6 +51,19 @@ public class Person {
     public Relationship getRelationship() {
         return relationship;
     }
+
+    public Set<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void addAttendance(Attendance attendance) {
+        attendances.add(attendance);
+    }
+
+    public void removeAttendance(Attendance attendance) {
+        attendances.remove(attendance);
+    }
+
 
     /**
      * Returns true if both persons have the same name.
