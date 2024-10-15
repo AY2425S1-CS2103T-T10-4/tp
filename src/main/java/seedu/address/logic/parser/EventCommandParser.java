@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LOCATION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.stream.Stream;
 import seedu.address.logic.commands.EventCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.event.Event;
+import seedu.address.model.person.Address;
 
 /**
  * Parses input arguments and creates a new EventCommand object
@@ -24,9 +26,9 @@ public class EventCommandParser implements Parser<EventCommand> {
      */
     public EventCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_DATE);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_DATE, PREFIX_LOCATION);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_DATE)
+        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_DATE, PREFIX_LOCATION)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EventCommand.MESSAGE_USAGE));
         }
@@ -34,8 +36,10 @@ public class EventCommandParser implements Parser<EventCommand> {
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_DATE);
         String name = argMultimap.getValue(PREFIX_NAME).get().trim();
         LocalDate date = LocalDate.parse(argMultimap.getValue(PREFIX_DATE).get().trim());
+        String locationString = argMultimap.getValue(PREFIX_LOCATION).get().trim();
+        Address location = new Address(locationString);
 
-        Event event = new Event(name, date, new HashSet<>());
+        Event event = new Event(name, date, new HashSet<>(), location);
 
         return new EventCommand(event);
     }

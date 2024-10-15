@@ -9,8 +9,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.event.Attendee;
 import seedu.address.model.event.Event;
-import seedu.address.model.person.Person;
+import seedu.address.model.person.Address;
 
 /**
  * Jackson-friendly version of {@link Event}.
@@ -18,7 +19,8 @@ import seedu.address.model.person.Person;
 public class JsonAdaptedEvent {
     private final String eventName;
     private final LocalDate eventDate;
-    private final Set<JsonAdaptedPerson> attendees = new HashSet<>();
+    private final Set<JsonAdaptedAttendee> attendees = new HashSet<>();
+    private final String location;
 
     /**
      * Constructs a {@code JsonAdaptedEvent} with the given event details.
@@ -26,12 +28,14 @@ public class JsonAdaptedEvent {
     @JsonCreator
     public JsonAdaptedEvent(@JsonProperty("eventName") String eventName,
                             @JsonProperty("eventDate") LocalDate eventDate,
-                            @JsonProperty("attendees") Set<JsonAdaptedPerson> attendees) {
+                            @JsonProperty("attendees") Set<JsonAdaptedAttendee> attendees,
+                            @JsonProperty("location") String location) {
         this.eventName = eventName;
         this.eventDate = eventDate;
         if (attendees != null) {
             this.attendees.addAll(attendees);
         }
+        this.location = location;
     }
 
     /**
@@ -40,7 +44,8 @@ public class JsonAdaptedEvent {
     public JsonAdaptedEvent(Event source) {
         eventName = source.getEventName();
         eventDate = source.getDate();
-        attendees.addAll(source.getAttendees().stream().map(JsonAdaptedPerson::new).collect(Collectors.toSet()));
+        attendees.addAll(source.getAttendees().stream().map(JsonAdaptedAttendee::new).collect(Collectors.toSet()));
+        location = source.getLocation().value;
     }
 
     /**
@@ -49,10 +54,11 @@ public class JsonAdaptedEvent {
      * @throws IllegalValueException if there were any data constraints violated in the adapted event.
      */
     public Event toModelType() throws IllegalValueException {
-        final Set<Person> modelAttendees = new HashSet<>();
-        for (JsonAdaptedPerson attendee : attendees) {
+        final Set<Attendee> modelAttendees = new HashSet<>();
+        for (JsonAdaptedAttendee attendee : attendees) {
             modelAttendees.add(attendee.toModelType());
         }
-        return new Event(eventName, eventDate, modelAttendees);
+        final Address modelLocation = new Address(location);
+        return new Event(eventName, eventDate, modelAttendees, modelLocation);
     }
 }
