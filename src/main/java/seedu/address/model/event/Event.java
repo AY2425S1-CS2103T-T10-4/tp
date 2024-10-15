@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Address;
@@ -90,11 +91,10 @@ public class Event {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("eventName", eventName)
-                .add("eventDate", date)
-                .add("attendees", attendees)
-                .add("location", location)
-                .toString();
+        String attendeesString = attendees.stream()
+                .map(Attendee::toString)
+                .collect(Collectors.joining(", "));
+        return String.format("Event: %s; Date: %s; Location: %s; Attendees: [%s]",
+                eventName, date, location, attendeesString);
     }
 }
