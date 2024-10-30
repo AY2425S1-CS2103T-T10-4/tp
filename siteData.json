@@ -118,6 +118,7 @@
         "deleting-a-person-delete": "Deleting a person : delete",
         "clearing-all-persons-clear": "Clearing all persons : clear",
         "listing-all-events-list-e": "Listing all events : list -e",
+        "adding-an-event-event": "Adding an event: event",
         "exiting-the-program-exit": "Exiting the program : exit",
         "saving-the-data": "Saving the data",
         "editing-the-data-file": "Editing the data file",
