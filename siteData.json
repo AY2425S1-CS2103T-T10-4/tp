@@ -120,6 +120,7 @@
         "clearing-all-events-clear-e": "Clearing all events : clear -e",
         "listing-all-events-list-e": "Listing all events : list -e",
         "adding-an-event-event": "Adding an event: event",
+        "updating-an-event-update": "Updating an event: update",
         "exiting-the-program-exit": "Exiting the program : exit",
         "saving-the-data": "Saving the data",
         "editing-the-data-file": "Editing the data file",
