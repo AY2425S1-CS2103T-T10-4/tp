@@ -62,8 +62,14 @@
         "glossary": "Glossary",
         "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
         "launch-and-shutdown": "Launch and shutdown",
+        "listing-all-persons": "Listing all persons",
+        "adding-a-person": "Adding a person",
         "deleting-a-person": "Deleting a person",
-        "saving-data": "Saving data"
+        "editing-a-person": "Editing a person",
+        "listing-all-events": "Listing all events",
+        "saving-data": "Saving data",
+        "appendix-effort": "Appendix: Effort",
+        "appendix-planned-enhancements": "Appendix: Planned Enhancements"
       },
       "headingKeywords": {}
     },
