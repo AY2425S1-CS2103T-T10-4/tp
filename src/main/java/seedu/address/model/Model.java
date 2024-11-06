@@ -112,7 +112,17 @@ public interface Model {
     /** Returns the length of the event list */
     int getEventListLength();
 
+    /**
+     * Replaces event book data with the data in {@code eventBook}.
+     */
     void setEventBook(ReadOnlyEventBook eventBook);
+
+    /** Returns the EventBook **/
     ReadOnlyEventBook getEventBook();
+
+    /**
+     * Updates the filter of the filtered event list to filter by the given {@code predicate}.
+     * @throws NullPointerException if {@code predicate} is null.
+     */
     void updateFilteredEventList(Predicate<Event> predicate);
 }
