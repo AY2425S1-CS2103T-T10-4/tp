@@ -6,13 +6,13 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.ObservableList;
 import seedu.address.model.AddressBook;
 import seedu.address.model.EventBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-
-
+import seedu.address.model.event.Event;
 
 public class ClearCommandTest {
 
@@ -48,4 +48,21 @@ public class ClearCommandTest {
         assertCommandSuccess(new ClearCommand(false), model, ClearCommand.MESSAGE_EVENTS_SUCCESS, expectedModel);
     }
 
+    @Test
+    public void execute_clearPersonBook_removesAttendeesFromEvents() {
+        Model model = new ModelManager(getTypicalAddressBook(), getTypicalEventBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), getTypicalEventBook(), new UserPrefs());
+
+        expectedModel.setAddressBook(new AddressBook());
+
+        ObservableList<Event> events = expectedModel.getEventList();
+        for (Event event : events) {
+            event.clearAttendees();
+        }
+
+        assertCommandSuccess(new ClearCommand(true), model, ClearCommand.MESSAGE_PERSONS_SUCCESS, expectedModel);
+    }
 }
+
+
+

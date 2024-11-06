@@ -2,8 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.HashSet;
-
 import javafx.collections.ObservableList;
 import seedu.address.model.AddressBook;
 import seedu.address.model.EventBook;
@@ -38,16 +36,8 @@ public class ClearCommand extends Command {
 
             // Need to remove attendees from EventBook
             ObservableList<Event> allEvents = model.getEventList();
-            for (int i = 0; i < allEvents.size(); i++) {
-                Event currEvent = allEvents.get(i);
-                Event updatedEvent = new Event(
-                        currEvent.getEventName(),
-                        currEvent.getStartDate(),
-                        currEvent.getEndDate(),
-                        currEvent.getLocation(),
-                        new HashSet<>() // empty attendee set
-                );
-                model.updateEvent(updatedEvent, i);
+            for (Event currEvent : allEvents) {
+                currEvent.clearAttendees();
             }
 
             return new CommandResult(MESSAGE_PERSONS_SUCCESS);
