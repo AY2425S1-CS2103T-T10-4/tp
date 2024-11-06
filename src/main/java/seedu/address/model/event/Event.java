@@ -85,6 +85,10 @@ public class Event {
         return location;
     }
 
+    public void clearAttendees() {
+        this.attendees.clear();
+    }
+
 
     /**
      * Returns true if both events have the same name, date and attendees.
