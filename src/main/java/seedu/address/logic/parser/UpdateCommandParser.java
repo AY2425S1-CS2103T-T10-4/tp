@@ -11,6 +11,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_START_DATE;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -88,8 +89,7 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
      * Returns true if no prefixes other than the event index has been supplied.
      */
     private boolean hasNoPrefixesSupplied(ArgumentMultimap argumentMultimap) {
-        return Stream.of(PREFIX_NAME, PREFIX_START_DATE, PREFIX_END_DATE, PREFIX_ATTENDEES, PREFIX_REMOVE_ATTENDEE)
-                .allMatch(prefix -> argumentMultimap.getValue(prefix).isEmpty());
+        return Arrays.stream(VALID_ARG_LIST).allMatch(prefix -> argumentMultimap.getValue(prefix).isEmpty());
     }
 
     /**
