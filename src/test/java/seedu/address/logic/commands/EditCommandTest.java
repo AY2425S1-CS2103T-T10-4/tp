@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
@@ -154,6 +155,103 @@ public class EditCommandTest {
                 new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build());
 
         assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    // ================================ Phone Number Tests ================================
+
+    @Test
+    public void execute_validPhoneNumberWithNonDigitCharacters_successWithWarning() {
+        Index indexLastPerson = Index.fromOneBased(model.getFilteredPersonList().size());
+        Person lastPerson = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+
+        String newPhoneNumber = "12345(HP)";
+        PersonBuilder personInList = new PersonBuilder(lastPerson);
+        Person editedPerson = personInList.withPhone(newPhoneNumber).build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withPhone(newPhoneNumber).build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS_WITH_WARNING,
+                Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()),
+                new EventBook(model.getEventBook()), new UserPrefs());
+        expectedModel.setPerson(lastPerson, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_validPhoneNumberWithNonDigitCharactersWithSpaces_successWithWarning() {
+        Index indexLastPerson = Index.fromOneBased(model.getFilteredPersonList().size());
+        Person lastPerson = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+
+        String newPhoneNumber = "1234-5678 9999";
+        PersonBuilder personInList = new PersonBuilder(lastPerson);
+        Person editedPerson = personInList.withPhone(newPhoneNumber).build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withPhone(newPhoneNumber).build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS_WITH_WARNING,
+                Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()),
+                new EventBook(model.getEventBook()), new UserPrefs());
+        expectedModel.setPerson(lastPerson, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_validPhoneNumberWithNonDigitCharacters_successWithNoWarning() {
+        Index indexLastPerson = Index.fromOneBased(model.getFilteredPersonList().size());
+        Person lastPerson = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+
+        String newPhoneNumber = "12345";
+        PersonBuilder personInList = new PersonBuilder(lastPerson);
+        Person editedPerson = personInList.withPhone(newPhoneNumber).build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withPhone(newPhoneNumber).build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()),
+                new EventBook(model.getEventBook()), new UserPrefs());
+        expectedModel.setPerson(lastPerson, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_invalidPhoneNumberWithOnlyNonDigitCharacters_failure() {
+        String badPhoneNumber = "Test ABC XYZ ";
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        assertThrows(IllegalArgumentException.class, () -> new EditPersonDescriptorBuilder(firstPerson)
+                .withPhone(badPhoneNumber).build());
+        /*
+        The regex check for a valid phone number is done when a new phone object is being instantiated, i.e.
+        new Phone(phoneNumber), so we only need to check if there is an exception thrown when building
+        the edit descriptor. We won't need to check command.execute() as we will not reach there.
+         */
+    }
+
+    @Test
+    public void execute_invalidPhoneNumberWithNonDigitCharactersButExceedLength_failure() {
+        String badPhoneNumber = "1234-5678 3333-3333 (HP)";
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        assertThrows(IllegalArgumentException.class, () -> new EditPersonDescriptorBuilder(firstPerson)
+                .withPhone(badPhoneNumber).build());
+    }
+
+    @Test
+    public void execute_invalidPhoneNumberWithInvalidSpecialCharacters_failure() {
+        String badPhoneNumber = "12345 [House] ";
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        assertThrows(IllegalArgumentException.class, () -> new EditPersonDescriptorBuilder(firstPerson)
+                .withPhone(badPhoneNumber).build());
     }
 
     @Test

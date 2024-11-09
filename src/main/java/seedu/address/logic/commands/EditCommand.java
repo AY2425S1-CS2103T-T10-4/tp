@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_RELATIONSHIP;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+    import static seedu.address.model.person.Phone.containsDigits;
 
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +49,11 @@ public class EditCommand extends Command {
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_PHONE_MISSING_DIGITS = "The phone number must contain at least one digit.";
+
+    public static final String MESSAGE_EDIT_PERSON_SUCCESS_WITH_WARNING = MESSAGE_EDIT_PERSON_SUCCESS
+            + "\n\n[You have used non-digit characters in the phone number. "
+            + "It is recommended to stick to only digits (0-9) for the phone number]";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -83,6 +89,20 @@ public class EditCommand extends Command {
         editPersonInEvent(model, personToEdit, editedPerson);
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+
+        // If the new phone number contains only non-digit characters, throw an error
+        if (!containsDigits(editedPerson.getPhone().toString())) {
+            throw new CommandException(MESSAGE_PHONE_MISSING_DIGITS);
+        }
+
+        // If the new phone number contains any non-digit characters, return success msg with a warning
+        // It's fine to use the wildcard .* here because the string has already passed the regex check
+        // for invalid characters
+        if (editedPerson.getPhone().toString().matches(".*[A-Za-z\\s/()_-]+.*")) {
+            return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS_WITH_WARNING,
+                    Messages.format(editedPerson)));
+        }
+
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
     }
 

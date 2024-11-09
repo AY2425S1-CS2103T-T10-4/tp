@@ -54,7 +54,7 @@ public class CommandTestUtil {
     public static final String RELATIONSHIP_DESC_BOB = " " + PREFIX_RELATIONSHIP + VALID_RELATIONSHIP_BOB;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
-    public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
+    public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911$"; // '$' not allowed in phones
     public static final String INVALID_PHONE_DESC_2 = " " + PREFIX_PHONE + "888888888888888888888"; // exceeds 15 digits
     public static final String INVALID_PHONE_DESC_3 = " " + PREFIX_PHONE + "12"; // less than 3 digits
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol

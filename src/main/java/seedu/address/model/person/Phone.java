@@ -11,8 +11,11 @@ public class Phone {
 
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone numbers should only contain numbers, and it should be at least 3 digits and at most 15 digits long";
-    public static final String VALIDATION_REGEX = "\\d{3,15}";
+            "Phone numbers should only contain numbers. The length of the phone number should be"
+                    + " at least 3 digits and at most 15 digits long.\n"
+                    + "Alphanumeric characters (A-Z, a-z), spaces, and some special characters / ( ) - _"
+                    + " are permitted but discouraged.";
+    public static final String VALIDATION_REGEX = "[\\w\\s\\d/()_-]{3,15}";
     public final String value;
 
     /**
@@ -30,7 +33,12 @@ public class Phone {
      * Returns true if a given string is a valid phone number.
      */
     public static boolean isValidPhone(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test.matches(VALIDATION_REGEX) && containsDigits(test);
+    }
+
+    // Prevent users from entering only characters as the phone number
+    public static boolean containsDigits(String test) {
+        return test.matches(".*\\d+.*");
     }
 
     @Override
