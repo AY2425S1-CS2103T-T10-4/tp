@@ -53,7 +53,8 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS_WITH_WARNING = MESSAGE_EDIT_PERSON_SUCCESS
             + "\n\n[You have used non-digit characters in the phone number. "
-            + "It is recommended to stick to only digits (0-9) for the phone number]";
+            + "Did you intend to do so? "
+            + "It is recommended to stick to digits (0-9) for the phone number.]";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;

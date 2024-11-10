@@ -14,7 +14,7 @@ public class Phone {
             "Phone numbers should only contain numbers. The length of the phone number should be"
                     + " at least 3 digits and at most 15 digits long.\n"
                     + "Alphanumeric characters (A-Z, a-z), spaces, and some special characters / ( ) - _"
-                    + " are permitted but discouraged.";
+                    + " are permitted, but you will be prompted to check again if you intended to use them.";
     public static final String VALIDATION_REGEX = "[\\w\\s\\d/()_-]{3,15}";
     public final String value;
 
