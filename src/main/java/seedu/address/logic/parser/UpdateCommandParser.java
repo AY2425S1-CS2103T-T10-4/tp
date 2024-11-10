@@ -73,8 +73,25 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
             ParserUtil.checkValidDates(startDate, endDate);
         }
         Address location = parseLocation(argMultimap);
-        Set<Index> addIndices = parseAttendeeIndices(argMultimap, PREFIX_ATTENDEES);
-        Set<Index> removeIndices = parseAttendeeIndices(argMultimap, PREFIX_REMOVE_ATTENDEE);
+
+
+        // Updated attendee parsing
+        Set<Index> addIndices = new HashSet<>();
+        Set<Index> removeIndices = new HashSet<>();
+
+        if (arePrefixesPresent(argMultimap, PREFIX_ATTENDEES)) {
+            addIndices = ParserUtil.parseAttendeeIndices(
+                    argMultimap.getValue(PREFIX_ATTENDEES).get(),
+                    false
+            );
+        }
+
+        if (arePrefixesPresent(argMultimap, PREFIX_REMOVE_ATTENDEE)) {
+            removeIndices = ParserUtil.parseAttendeeIndices(
+                    argMultimap.getValue(PREFIX_REMOVE_ATTENDEE).get(),
+                    false
+            );
+        }
 
         return new UpdateCommand(name, startDate, endDate, location, addIndices, removeIndices, indexToUpdate);
     }
@@ -184,24 +201,5 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
         return null;
     }
 
-    /**
-     * Parses and returns the set of attendee indices to be added or deleted.
-     *
-     * @param argMultimap The map of arguments to their values.
-     * @return The set of attendee indices to be added or deleted.
-     * @throws ParseException If attendee list is empty or
-     *     the supplied index is not a valid integer.
-     */
-    private Set<Index> parseAttendeeIndices(ArgumentMultimap argMultimap, Prefix prefix)
-            throws ParseException {
-        Set<Index> attendeeIndices = new HashSet<>();
-        if (arePrefixesPresent(argMultimap, prefix)) {
-            attendeeIndices.addAll(ParserUtil.parseIndexes(argMultimap.getValue(prefix).orElse("")));
-            if (attendeeIndices.isEmpty()) {
-                throw new ParseException(String.format("Attendee list cannot be empty. \n%1$s",
-                        UpdateCommand.MESSAGE_USAGE));
-            }
-        }
-        return attendeeIndices;
-    }
+
 }
