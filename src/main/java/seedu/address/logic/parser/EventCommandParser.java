@@ -48,10 +48,8 @@ public class EventCommandParser implements Parser<EventCommand> {
 
             Address location = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_LOCATION).get().trim());
 
-            String indexes = (arePrefixesPresent(argMultimap, PREFIX_ATTENDEES))
-                             ? argMultimap.getValue(PREFIX_ATTENDEES).get()
-                             : " ";
-            Set<Index> attendeeIndexes = ParserUtil.parseIndexes(indexes);
+            String attendeeIndices = argMultimap.getValue(PREFIX_ATTENDEES).orElse("");
+            Set<Index> attendeeIndexes = ParserUtil.parseAttendeeIndices(attendeeIndices, true);
 
             return new EventCommand(name, startDate, endDate, location, attendeeIndexes);
         } catch (DateTimeParseException e) {
