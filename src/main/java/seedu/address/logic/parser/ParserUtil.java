@@ -62,6 +62,40 @@ public class ParserUtil {
         return indexes;
     }
 
+
+    /**
+     * Parses and validates a string of attendee indices.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @param indices The string of space-separated indices
+     * @param allowEmpty Whether an empty string is considered valid
+     * @return Set of parsed Index objects
+     * @throws ParseException if the format is invalid or indices are not positive integers
+     */
+    public static Set<Index> parseAttendeeIndices(String indices, boolean allowEmpty) throws ParseException {
+        String trimmedIndices = indices.trim();
+
+        if (trimmedIndices.isEmpty()) {
+            if (allowEmpty) {
+                return new HashSet<>();
+            }
+            throw new ParseException(String.format(
+                    "Attendee list cannot be empty. Expected format: space-separated numbers (e.g. 1 2 3)"));
+        }
+
+        try {
+            Set<Index> parsedIndices = parseIndexes(trimmedIndices);
+            if (parsedIndices.isEmpty()) {
+                throw new ParseException(String.format(
+                        "No valid indices found. Expected format: space-separated numbers (e.g. 1 2 3)"));
+            }
+            return parsedIndices;
+        } catch (ParseException e) {
+            throw new ParseException(String.format(
+                    "Invalid format for attendee indices. Expected format: space-separated numbers (e.g. 1 2 3)"));
+        }
+    }
+
     /**
      * Parses a {@code String name} into a {@code Name}.
      * Leading and trailing whitespaces will be trimmed.
