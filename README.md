@@ -10,3 +10,7 @@ contact management tasks done faster than traditional GUI apps.
 
 * The User Guide and Developer Guide can be found [here](https://ay2425s1-cs2103t-t10-4.github.io/tp/index.html).
 * This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
+
+## Documentation
+<img width="1466" alt="Screenshot 2025-02-15 at 7 03 10 PM" src="https://github.com/user-attachments/assets/b67a00f9-15a7-4736-988f-3d28a264fef7" href="https://ay2425s1-cs2103t-t10-4.github.io/tp/index.html"/>
+
